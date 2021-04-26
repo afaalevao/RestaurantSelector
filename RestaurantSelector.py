@@ -19,6 +19,10 @@ def main():
     loc = geolocator.geocode(city + ',' + state + ',' + country)
     print("latitude:", loc.latitude, "\nlongtitude:", loc.longitude)
 
+    '''
+    Look into web scraping from yelp or another food review website
+    '''
+
 
 if __name__ == '__main__':
     main()
