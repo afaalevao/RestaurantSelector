@@ -6,22 +6,36 @@ Python Program to select random restaurant given a location
 
 
 from geopy.geocoders import Nominatim
+import bs4
+import urllib.request as request
 
 
 def main():
-    geolocator = Nominatim(user_agent="my_user_agent")
-    location = input("Enter your location (city, state, country): ")
+    print("Welcome to the Random Restaurant Selector!")
 
-    city = location.split(',')[0]
-    state = location.split(',')[1]
-    country = location.split(',')[2]
+    # get input from user
+    city = input("Enter the city where you would like to eat: ")
+    option = input("Would you like to eat a specific type of food? (y/n): ")
+    type = ""
 
-    loc = geolocator.geocode(city + ',' + state + ',' + country)
-    print("latitude:", loc.latitude, "\nlongtitude:", loc.longitude)
+    if option == "y":
+        type = input("What type of food do you want to eat? (Japanese, Mexican, etc.): ")
 
-    '''
-    Look into web scraping from yelp or another food review website
-    '''
+    url = "https://www.yelp.com/search?find_desc=" + type + "&find_loc=" + city
+    print(url)
+
+    web_request = request.urlopen(url)
+    page = bs4.BeautifulSoup(web_request, 'html.parser')
+
+    # this line will need to be updated as yelp updates webpage
+    restaurants = page.find_all("div", {"class": "mainAttributes__09f24__26-vh arrange-unit__09f24__3IxLD arrange-unit-fill__09f24__1v_h4 border-color--default__09f24__1eOdn"})
+
+    for restaurant in restaurants:
+        try:
+            name = restaurant.find("a").text
+            print(name)
+        except:
+            print("No information found.")
 
 
 if __name__ == '__main__':
