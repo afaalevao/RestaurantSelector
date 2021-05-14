@@ -39,6 +39,13 @@ def print_restaurants(restaurants):
         try:
             price = restaurant.find("span", {"class": "priceRange__09f24__2O6le css-xtpg8e"}).text
             print(price)
+
+            if price == "$":
+                price = 1
+            elif price == "$$":
+                price = 2
+            else:
+                price = 3
         except:
             print("No pricing available")
 
@@ -79,7 +86,18 @@ def main():
     # this line will need to be updated as yelp updates webpage
     restaurants = page.find_all("div", {"class": "mainAttributes__09f24__26-vh arrange-unit__09f24__3IxLD arrange-unit-fill__09f24__1v_h4 border-color--default__09f24__1eOdn"})
 
+    print("Here are your options:\n")
+
+    # stores restaurant name, rating, and pricing
     res_info_list = print_restaurants(restaurants)
+
+    # ask if user wants program to select restaurant for them
+    select = input("Would you like us to randomly select a restaurant for you? (y/n)")
+
+    if select == "y":
+        print("hi")
+    else:
+        print("Thank you, enjoy your meal!")
 
 
 if __name__ == '__main__':
