@@ -7,6 +7,7 @@ Python Program to select random restaurant given a location
 
 import bs4
 import urllib.request as request
+import tkinter
 
 
 # class to store Restaurant information
@@ -18,16 +19,17 @@ class Restaurant:
 
 
 # print restaurant information
-def print_restaurants(restaurants):
+def get_info(restaurants):
     restaurant_list = []
 
-    # iterate through each restaurant and print information
+    # iterate through each restaurant and print information if present
     for restaurant in restaurants:
         try:
             name = restaurant.find("a").text
             print(name)
         except:
             print("No name found.")
+            name = ""
 
         try:
             rate = restaurant.find("div", {"class": "attribute__09f24__3znwq display--inline-block__09f24__3L1EB margin-r1__09f24__BCulR border-color--default__09f24__1eOdn"}).div.get("aria-label")
@@ -35,11 +37,11 @@ def print_restaurants(restaurants):
             print("Rating: " + rating)
         except:
             print("No rating found")
+            rating = ""
 
         try:
             price = restaurant.find("span", {"class": "priceRange__09f24__2O6le css-xtpg8e"}).text
             print(price)
-
             if price == "$":
                 price = 1
             elif price == "$$":
@@ -48,6 +50,7 @@ def print_restaurants(restaurants):
                 price = 3
         except:
             print("No pricing available")
+            price = 0
 
         # newline for spacing
         print("\n")
@@ -59,23 +62,15 @@ def print_restaurants(restaurants):
 
 
 def main():
+
     print("Welcome to the Random Restaurant Selector!")
 
     # get input from user
     city = input("Enter the city where you would like to eat: ")
-    price_range = input("How much money would you like to spend? ($, $$, $$$): ")
-    want_type = input("Would you like to eat a specific type of food? (y/n): ")
-    want_rating = input("Would you like to filter out restaurants less than a certain rating? (y/n): ")
+    food_type = input("What type of food are you craving? (Japanese, Mexican, etc.): ")
 
     city = city.replace(" ", "")  # remove whitespace from city name
-    food_type = ""
-    min_stars = 0
-
-    if want_type == "y":
-        food_type = input("What type of food do you want to eat? (Japanese, Mexican, etc.): ")
-
-    if want_rating == "y":
-        min_stars = input("What is the minimum number of stars you would like? (out of 5): ")
+    # min_stars = 0
 
     url = "https://www.yelp.com/search?find_desc=" + food_type + "&find_loc=" + city
     print("\n")
@@ -89,8 +84,11 @@ def main():
     print("Here are your options:\n")
 
     # stores restaurant name, rating, and pricing
-    res_info_list = print_restaurants(restaurants)
+    res_info_list = get_info(restaurants)
 
+
+
+    '''
     # ask if user wants program to select restaurant for them
     select = input("Would you like us to randomly select a restaurant for you? (y/n)")
 
@@ -98,6 +96,7 @@ def main():
         print("hi")
     else:
         print("Thank you, enjoy your meal!")
+    '''
 
 
 if __name__ == '__main__':
