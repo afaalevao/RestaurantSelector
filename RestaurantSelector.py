@@ -7,6 +7,8 @@ Python Program to select random restaurant given a location
 
 import bs4
 import urllib.request as request
+import random
+import secrets
 import tkinter
 
 
@@ -61,16 +63,22 @@ def get_info(restaurants):
     return restaurant_list
 
 
+# select restaurant from list
+def select_restaurant(r_list):
+    random.shuffle(r_list)  # shuffle items in list
+    rand_index = secrets.randbelow(len(r_list))  # select random index
+    return r_list[rand_index]
+
+
 def main():
 
     print("Welcome to the Random Restaurant Selector!")
 
     # get input from user
     city = input("Enter the city where you would like to eat: ")
-    food_type = input("What type of food are you craving? (Japanese, Mexican, etc.): ")
+    food_type = input("What type of food are you craving? (Press Enter if you don't care): ")
 
     city = city.replace(" ", "")  # remove whitespace from city name
-    # min_stars = 0
 
     url = "https://www.yelp.com/search?find_desc=" + food_type + "&find_loc=" + city
     print("\n")
@@ -86,17 +94,23 @@ def main():
     # stores restaurant name, rating, and pricing
     res_info_list = get_info(restaurants)
 
+    select = input("Would you like the program to select a random restaurant for you from this list? (y/n)\n")
 
+    if select.lower() == 'y':
+        # get randomly selected restaurant
+        rand_restaurant = select_restaurant(res_info_list)
 
-    '''
-    # ask if user wants program to select restaurant for them
-    select = input("Would you like us to randomly select a restaurant for you? (y/n)")
+        # print output
+        print("All finished!")
+        print("Looks like you're eating at " + rand_restaurant.name + " today!")
+        print("Here is some info about your restaurant:")
+        print("Rating (Out of 5): " + rand_restaurant.rating)
+        if rand_restaurant.price is not None:
+            print("Price: " + str(rand_restaurant.price))
+        else:
+            print("Price: Unavailable")
 
-    if select == "y":
-        print("hi")
-    else:
-        print("Thank you, enjoy your meal!")
-    '''
+    print("Enjoy your meal!")
 
 
 if __name__ == '__main__':
