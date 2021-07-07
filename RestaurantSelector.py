@@ -44,15 +44,17 @@ def get_info(restaurants):
         try:
             price = restaurant.find("span", {"class": "priceRange__09f24__2O6le css-xtpg8e"}).text
             print(price)
+            '''
             if price == "$":
                 price = 1
             elif price == "$$":
                 price = 2
             else:
                 price = 3
+            '''
         except:
             print("No pricing available")
-            price = 0
+            price = None
 
         # newline for spacing
         print("\n")
